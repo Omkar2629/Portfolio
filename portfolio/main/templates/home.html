@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>My Portfolio</title>
@@ -64,6 +65,22 @@
         .skills-box ul {
     margin-top: 10px;
     line-height: 1.8;
+}
+        .download-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,114,255,0.4);
 }
 </style>
 </head>
@@ -137,6 +154,9 @@
         <div class="mt-4">
             <a href="https://github.com/Omkar2629" class="btn btn-outline-info me-2">GitHub</a>
             <a href="https://linkedin.com/in/omkarsubhankar" class="btn btn-outline-light">LinkedIn</a>
+            <a href="{% static 'cv/Omkar_CV.pdf' %}" download class="btn btn-outline-success">
+    Download CV
+</a>
         </div>
 
     </div>
