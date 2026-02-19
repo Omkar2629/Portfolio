@@ -82,76 +82,116 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,114,255,0.4);
 }
+.certification-card {
+    background: #0f1f35;
+    padding: 18px 22px;
+    border-radius: 12px;
+}
+
+.certification-img {
+    max-height: 130px;   /* smaller image */
+    object-fit: contain;
+}
+
+.certification-list {
+    padding-left: 18px;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.certification-list li::marker {
+    color: #00bfff;
+}
+
+#certifications h5 {
+    font-size: 1.1rem;   /* smaller title */
+}
+
 </style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top shadow">
-  <div class="container">
+<nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top shadow-sm py-3">
+  <div class="container-fluid px-5">
 
-    <a class="navbar-brand fw-bold text-info" href="#home"></a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav mx-auto align-items-center">
 
-        <li class="nav-item">
-          <a class="nav-link" href="#home">Home</a>
-        </li>
+      <!-- LEFT SIDE NAVIGATION -->
+      <ul class="navbar-nav align-items-center gap-3">
 
-        <li class="nav-item">
-          <a class="nav-link" href="#about">About</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#skills">Skills</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#projects">Projects</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#internships">Internships</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#education">Education</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">Contact</a>
-        </li>
-
-        <li class="nav-item ms-3">
-          <a class="btn btn-info text-dark fw-bold" href="/create/">Generate CV</a>
-        </li>
+        <li class="nav-item"><a class="nav-link text-light" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#internships">Internships</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#certifications">Certifications</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#education">Education</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="#contact">Contact</a></li>
 
       </ul>
+
+      <!-- RIGHT SIDE -->
+      <div class="ms-auto d-flex align-items-center gap-3">
+
+        <a href="{% url 'generate_cv' %}"
+           class="btn btn-info px-4 fw-semibold">
+            Generate CV
+        </a>
+
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit"
+                        class="btn btn-outline-info px-3">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}"
+               class="btn btn-outline-info px-3">
+                Login
+            </a>
+        {% endif %}
+
+      </div>
+
     </div>
   </div>
 </nav>
 
 <!-- HOME -->
+{% load static %}
+
 <section id="home" class="text-center">
     <div class="container">
 
+        <!-- PROFILE PIC FIRST -->
+        <div class="mb-3">
+            <img src="{% static 'images/Pfp.jpg' %}"
+                 style="width:150px; height:150px; border-radius:50%; border:4px solid #00c6ff;">
+        </div>
+
         <h1 class="display-3 fw-bold">Omkar Subhankar</h1>
 
-<h3 class="text-info mb-3">
-    Python Developer • AI & Data Science Enthusiast
-</h3>
+        <h3 class="text-info mb-3">
+            Python Developer • AI & Data Science Enthusiast
+        </h3>
 
-<p class="lead">
-    Building real-world solutions using Python, Machine Learning, and Data Analytics.
-</p>
+        <p class="lead">
+            Building real-world solutions using Python, Machine Learning, and Data Analytics.
+        </p>
 
         <div class="mt-4">
+
             <a href="https://github.com/Omkar2629" class="btn btn-outline-info me-2">GitHub</a>
             <a href="https://linkedin.com/in/omkarsubhankar" class="btn btn-outline-light">LinkedIn</a>
             <a href="{% static 'cv/Omkar_CV.pdf' %}" download class="btn btn-outline-success">
@@ -204,18 +244,24 @@
 
         <div class="skills-box">
             <h4>Databases</h4>
-            <p>MySQL • PL/SQL • MongoDB</p>
+            <p>MySQL • PL/SQL • MongoDB • PostgreSQL</p>
         </div>
 
         <div class="skills-box">
             <h4>Data Science & Tools</h4>
-            <p>NumPy • Pandas • Scikit-Learn • Power BI • Excel</p>
+            <p>NumPy • Pandas • Matplotlib • Scikit-Learn • Power BI • Excel</p>
         </div>
 
         <div class="skills-box">
             <h4>Soft Skills</h4>
             <p>Problem Solving • Team Player • Adaptive • Quick Learner</p>
         </div>
+        {% for skill in skills %}
+<div class="skills-box">
+    <h4>{{ skill.name }}</h4>
+    <p>{{ skill.category }}</p>
+</div>
+{% endfor %}
 
     </div>
 </section>
@@ -226,6 +272,7 @@
 
         <h2 class="section-title">Projects</h2>
 
+        <!-- HARDCODED PROJECTS (Keep as-is) -->
         <div class="skills-box">
             <h4>Authentication Utilities (CAPTCHA & Password Validator)</h4>
             <p>
@@ -249,6 +296,14 @@
                 with MongoDB for real-time storage.
             </p>
         </div>
+
+        <!-- DYNAMIC PROJECTS FROM ADMIN -->
+        {% for project in projects %}
+        <div class="skills-box">
+            <h4>{{ project.title }}</h4>
+            <p>{{ project.description }}</p>
+        </div>
+        {% endfor %}
 
     </div>
 </section>
@@ -274,6 +329,65 @@
     </div>
 </section>
 
+<!-- CERTIFICATIONS SECTION -->
+<section id="certifications" class="py-4">
+  <div class="container">
+
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-info">Certifications</h2>
+      <p class="text-light opacity-75 small">
+        Verified credentials demonstrating technical expertise and continuous learning.
+      </p>
+    </div>
+
+    {% for cert in certifications %}
+    <div class="certification-card mb-4">
+
+      <div class="row align-items-center">
+
+        <!-- LEFT: Certificate Image -->
+        <div class="col-md-3 text-center mb-3 mb-md-0">
+          <img src="{{ cert.image.url }}"
+               alt="{{ cert.title }}"
+               class="img-fluid rounded certification-img">
+        </div>
+
+        <!-- RIGHT: Certificate Content -->
+        <div class="col-md-9">
+
+          <h5 class="fw-semibold text-info mb-1">
+            {{ cert.title }}
+          </h5>
+
+          <p class="text-light small mb-2">
+            <strong>{{ cert.issuer }}</strong> • {{ cert.year }}
+          </p>
+
+          <ul class="text-light small certification-list">
+            {% for line in cert.description.splitlines %}
+              {% if line %}
+                <li>{{ line }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+
+          {% if cert.credential_link %}
+          <a href="{{ cert.credential_link }}"
+             target="_blank"
+             class="btn btn-outline-info btn-sm mt-2">
+             View Credential
+          </a>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+
 <!-- EDUCATION -->
 <section id="education">
     <div class="container text-center">
@@ -283,38 +397,113 @@
         <div class="skills-box">
             <h4>B.Tech – Computer Science</h4>
             <p>Lovely Professional University</p>
-            <p class="text-info">CGPA: 6.7 | 2023 – Present</p>
+            <p class="text-info">2023 – 2027</p>
         </div>
 
         <div class="skills-box">
             <h4>Intermediate</h4>
             <p>ODM Public School</p>
-            <p class="text-info">75.2%</p>
         </div>
 
         <div class="skills-box">
             <h4>Matriculation</h4>
             <p>Vimala Convent School</p>
-            <p class="text-info">92%</p>
         </div>
 
     </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
-    <div class="container text-center">
+<section id="contact" class="py-5">
+  <div class="container">
 
-        <h2 class="section-title">Contact</h2>
+    <h2 class="text-center mb-5 text-info fw-bold section-title">
+      Get In Touch
+    </h2>
 
-        <div class="skills-box">
-            <p><b>Email:</b> omkarsubhankar263@gmail.com</p>
-            <p><b>GitHub:</b> github.com/Omkar2629</p>
-            <p><b>LinkedIn:</b> linkedin.com/in/omkarsubhankar</p>
+    <div class="row align-items-stretch g-4">
+
+      <!-- LEFT INFO PANEL -->
+      <div class="col-md-5">
+
+        <div class="contact-info-card h-100 p-5">
+
+          <h4 class="mb-4 text-info fw-semibold">
+            Contact Information
+          </h4>
+
+          <p class="mb-4 text-light">
+            I’m open to opportunities, collaborations,
+            and discussions around innovative projects.
+            Feel free to reach out.
+          </p>
+
+          <div class="contact-email-box">
+            <small class="text-secondary d-block mb-1">
+              Email Address
+            </small>
+            <div class="fw-semibold text-white">
+              omkarsubhankar263@gmail.com
+            </div>
+          </div>
+
         </div>
 
+      </div>
+
+      <!-- RIGHT FORM PANEL -->
+      <div class="col-md-7">
+
+        <div class="contact-form-card p-5">
+
+          <h5 class="text-info fw-semibold mb-4">
+            Send a Message
+          </h5>
+
+          <form method="post" action="{% url 'contact_submit' %}">
+            {% csrf_token %}
+
+            <div class="mb-4">
+              <input type="text"
+                     name="name"
+                     class="form-control contact-input"
+                     placeholder="Full Name"
+                     required>
+            </div>
+
+            <div class="mb-4">
+              <input type="email"
+                     name="email"
+                     class="form-control contact-input"
+                     placeholder="Email Address"
+                     required>
+            </div>
+
+            <div class="mb-4">
+              <textarea name="message"
+                        rows="5"
+                        class="form-control contact-input"
+                        placeholder="Your Message"
+                        required></textarea>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-info px-4 contact-btn">
+              Type Message
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
     </div>
+
+  </div>
 </section>
+
+
 {% if request.session.visitor_name %}
 <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
 

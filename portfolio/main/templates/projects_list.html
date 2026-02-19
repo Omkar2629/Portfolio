@@ -1,0 +1,16 @@
+<h1>All Projects</h1>
+
+{% for project in projects %}
+    <div>
+        <h2>{{ project.title }}</h2>
+        <p>{{ project.description }}</p>
+        <a href="{% url 'project_detail' project.slug %}">View Details</a>
+    </div>
+{% endfor %}
+
+<h1>{{ project.title }}</h1>
+<p>{{ project.description }}</p>
+<p>{{ project.tech_stack }}</p>
+
+<a href="{{ project.github_link }}">GitHub</a>
+<a href="{{ project.live_link }}">Live Demo</a>

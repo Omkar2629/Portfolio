@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Certifications</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .cert-card {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+
+        .cert-card:hover {
+            box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Manage Certifications</span>
+    <div>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
+            Back
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold">Your Certifications</h4>
+
+        <a href="/admin/main/certification/add/"
+           class="btn btn-info btn-sm">
+           + Add Certification
+        </a>
+    </div>
+
+    {% if certifications %}
+        {% for cert in certifications %}
+        <div class="cert-card mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h6 class="mb-1 fw-semibold">
+                        {{ cert.title }}
+                    </h6>
+                    <small class="text-muted">
+                        {{ cert.issuer }} • {{ cert.year }}
+                    </small>
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    {% if cert.credential_link %}
+                    <a href="{{ cert.credential_link }}"
+                       target="_blank"
+                       class="btn btn-outline-info btn-sm">
+                        View
+                    </a>
+                    {% endif %}
+
+                    <a href="{% url 'delete_certification' cert.id %}"
+                       onclick="return confirm('Are you sure you want to delete this certification?');"
+                       class="btn btn-outline-danger btn-sm">
+                        Delete
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center text-muted mt-5">
+            No certifications added yet.
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+
