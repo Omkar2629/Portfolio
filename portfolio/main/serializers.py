@@ -12,7 +12,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'description',
             'tech_stack',
             'github_link',
-            'live_demo_link',
+            'live_link',
             'created_date',
         ]
         read_only_fields = ['slug', 'created_date']

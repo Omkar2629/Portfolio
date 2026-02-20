@@ -36,8 +36,7 @@ urlpatterns = [
     path('cv/<str:template_name>/', views.render_selected_cv, name='render_selected_cv'),
     path('cv-download/<str:template_name>/', views.download_cv_pdf, name='download_cv_pdf'),
     path('api/projects/', project_list_api),
-    path('api/projects/<slug:slug>/', project_detail_api),
     path('api/projects/create/', project_create_api),
-    path('api/contact/', contact_create_api),
+    path('api/projects/<slug:slug>/', project_detail_api),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
