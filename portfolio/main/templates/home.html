@@ -106,6 +106,25 @@
 #certifications h5 {
     font-size: 1.1rem;   /* smaller title */
 }
+        .cta-buttons {
+    display: flex;
+    gap: 14px;              /* 🔥 perfect spacing */
+    flex-wrap: wrap;        /* mobile safe */
+    margin-top: 20px;
+}
+
+.cta-buttons .btn {
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+
+/* 🔥 subtle professional hover */
+.cta-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
 
 </style>
 </head>
@@ -140,26 +159,38 @@
       </ul>
 
       <!-- RIGHT SIDE -->
-      <div class="ms-auto d-flex align-items-center gap-3">
+      <div class="ms-auto d-flex align-items-center gap-2">
 
+        <!-- Generate CV always visible -->
         <a href="{% url 'generate_cv' %}"
            class="btn btn-info px-4 fw-semibold">
             Generate CV
         </a>
 
         {% if user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post">
+
+            {% if user.is_superuser %}
+                <a href="{% url 'dashboard' %}"
+                   class="btn btn-outline-info px-3">
+                    Dashboard
+                </a>
+            {% endif %}
+
+            <form action="{% url 'logout' %}" method="post" class="mb-0">
                 {% csrf_token %}
                 <button type="submit"
                         class="btn btn-outline-info px-3">
                     Logout
                 </button>
             </form>
+
         {% else %}
+
             <a href="{% url 'login' %}"
                class="btn btn-outline-info px-3">
                 Login
             </a>
+
         {% endif %}
 
       </div>
@@ -192,11 +223,9 @@
 
         <div class="mt-4">
 
-            <a href="https://github.com/Omkar2629" class="btn btn-outline-info me-2">GitHub</a>
+            <a href="https://github.com/Omkar2629" class="btn btn-outline-info">GitHub</a>
             <a href="https://linkedin.com/in/omkarsubhankar" class="btn btn-outline-light">LinkedIn</a>
-            <a href="{% static 'cv/Omkar_CV.pdf' %}" download class="btn btn-outline-success">
-    Download CV
-</a>
+            <a href="{% static 'cv/Omkar_CV.pdf' %}" download class="btn btn-outline-success">Download Resume</a>
         </div>
 
     </div>

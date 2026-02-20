@@ -10,7 +10,6 @@ urlpatterns = [
     path('projects/', views.projects_list, name='projects_list'),
     path('projects/<slug:slug>/', views.project_detail, name='project_detail'),
     path('generate-cv/', views.generate_cv, name='generate_cv'),
-    path('cv-preview/', views.cv_preview, name='cv_preview'),
     path('contact-submit/', views.contact_submit, name='contact_submit'),
 
     path('login/', auth_views.LoginView.as_view(
@@ -26,5 +25,8 @@ urlpatterns = [
     path('dashboard/projects/delete/<int:project_id>/', views.delete_project, name='delete_project'),
     path('dashboard/certifications/', views.manage_certifications, name='manage_certifications'),
     path('dashboard/certifications/delete/<int:cert_id>/', views.delete_certification, name='delete_certification'),
+    path('generate-cv/', views.generate_cv, name='generate_cv'),
+    path('choose-template/', views.choose_template, name='choose_template'),
+    path('cv/<str:template_name>/', views.render_selected_cv, name='render_selected_cv'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

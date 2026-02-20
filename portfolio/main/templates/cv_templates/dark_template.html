@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dark CV</title>
+<style>
+body {
+    background:#020617;
+    color:#e2e8f0;
+    font-family: Arial;
+    padding:40px;
+}
+.card {
+    background:#111827;
+    padding:30px;
+    border-radius:12px;
+}
+h1 { color:#38bdf8; }
+</style>
+</head>
+<body>
+<div class="card">
+
+<h1>{{ name }}</h1>
+<p>{{ email }} | {{ phone }}</p>
+
+<h3>Projects</h3>
+{% for proj in projects_data %}
+<ul>
+{% for p in proj.summary %}
+<li>{{ p }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Modern CV</title>
+<style>
+body { font-family: 'Segoe UI'; background:#f8fafc; padding:40px; }
+.container { background:white; padding:30px; border-radius:10px; }
+h1 { color:#2563eb; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>{{ name }}</h1>
+<p>{{ email }} • {{ phone }}</p>
+
+<h3>Skills</h3>
+<p>{{ skills }}</p>
+
+<h3>Projects</h3>
+{% for proj in projects_data %}
+<ul>
+{% for p in proj.summary %}
+<li>{{ p }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+</div>
+</body>
+</html>

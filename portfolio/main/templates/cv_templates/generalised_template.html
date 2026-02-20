@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generalised CV</title>
+
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 24px;
+            color: #111;
+        }
+
+        .cv-wrapper {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            padding: 28px 40px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #999;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+        .contact {
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .section-title {
+            color: #1e3a8a;
+            font-weight: bold;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #999;
+            padding-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            row-gap: 4px;
+            font-size: 14px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+        ul {
+            margin: 6px 0 10px 18px;
+        }
+
+        li {
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        .project-title {
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        a {
+            color: #1d4ed8;
+            text-decoration: none;
+        }
+
+        .edu-item {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="cv-wrapper">
+
+    <!-- HEADER -->
+    <div class="top-header">
+        <div>
+            <div class="name">{{ name }}</div>
+            <div style="font-size:14px;">
+                LinkedIn: {{ linkedin }}<br>
+                GitHub: {{ github }}
+            </div>
+        </div>
+
+        <div class="contact">
+            Email: {{ email }}<br>
+            Mobile: {{ phone }}
+        </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="section-title">Skills</div>
+    <div style="font-size:14px;">
+        {{ skills }}
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="section-title">Projects</div>
+
+    {% for proj in projects_data %}
+        <div class="project-title">
+            {{ proj.name }}
+        </div>
+
+        {% if proj.summary %}
+            <ul>
+                {% for point in proj.summary %}
+                    <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <ul>
+                <li>N/A</li>
+            </ul>
+        {% endif %}
+    {% endfor %}
+
+    <!-- INTERNSHIPS -->
+    <div class="section-title">Internships</div>
+    <div style="font-size:14px;">
+        {{ internships }}
+    </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="section-title">Certificates</div>
+    <div style="font-size:14px;">
+        {{ certifications }}
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="section-title">Education</div>
+    <div style="font-size:14px;">
+        {{ education }}
+    </div>
+
+</div>
+
+</body>
+</html>

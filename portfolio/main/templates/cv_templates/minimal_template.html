@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Minimal CV</title>
+<style>
+body { font-family: Georgia; margin:50px; }
+h1 { font-weight: normal; }
+</style>
+</head>
+<body>
+
+<h1>{{ name }}</h1>
+<p>{{ email }} | {{ phone }}</p>
+
+<hr>
+
+<h3>Projects</h3>
+{% for proj in projects_data %}
+<ul>
+{% for p in proj.summary %}
+<li>{{ p }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+</body>
+</html>

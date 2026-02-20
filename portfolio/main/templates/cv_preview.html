@@ -1,6 +1,82 @@
-<h1>{{ name }}</h1>
-<p>Email: {{ email }}</p>
-<p>Phone: {{ phone }}</p>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>CV Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 30px;
+        }
+
+```
+    .cv-container {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
+
+    .profile-img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #38bdf8;
+    }
+
+    h1 {
+        margin: 0;
+        color: #0f172a;
+    }
+
+    h2 {
+        color: #0ea5e9;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 5px;
+        margin-top: 28px;
+    }
+
+    ul {
+        margin-top: 8px;
+    }
+
+    .links a {
+        color: #0284c7;
+        text-decoration: none;
+    }
+</style>
+```
+
+</head>
+<body>
+
+<div class="cv-container">
+
+```
+<div class="header">
+    <div>
+        <h1>{{ name }}</h1>
+        <p>{{ email }} | {{ phone }}</p>
+    </div>
+
+    {% if profile_image %}
+        <img src="{{ profile_image.url }}" class="profile-img">
+    {% endif %}
+</div>
 
 <h2>Education</h2>
 <p>{{ education }}</p>
@@ -9,7 +85,30 @@
 <p>{{ skills }}</p>
 
 <h2>Projects</h2>
-<p>{{ projects }}</p>
+
+{% for proj in projects_data %}
+    <div style="margin-bottom: 18px;">
+
+        <!-- 🔥 Project Title -->
+        <h4 style="margin-bottom: 6px; color:#0f172a;">
+            {{ proj.title }}
+        </h4>
+
+        <!-- 🔥 Bullet Summary -->
+        {% if proj.summary %}
+            <ul>
+                {% for point in proj.summary %}
+                    <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>N/A</p>
+        {% endif %}
+
+    </div>
+{% empty %}
+    <p>N/A</p>
+{% endfor %}
 
 <h2>Internships</h2>
 <p>{{ internships }}</p>
@@ -18,5 +117,13 @@
 <p>{{ certifications }}</p>
 
 <h2>Links</h2>
-<p>LinkedIn: {{ linkedin }}</p>
-<p>GitHub: {{ github }}</p>
+<div class="links">
+    <p>LinkedIn: {{ linkedin }}</p>
+    <p>GitHub: {{ github }}</p>
+</div>
+```
+
+</div>
+
+</body>
+</html>

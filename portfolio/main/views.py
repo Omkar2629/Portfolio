@@ -1,5 +1,6 @@
 from .models import Skill, Project, Internship, Education
 from django.shortcuts import render
+from .nlp_utils import summarize_text
 
 def home(request):
     skills = Skill.objects.all()
@@ -34,26 +35,106 @@ def project_detail(request, slug):
     project = Project.objects.get(slug=slug)
     return render(request, 'project_detail.html', {'project': project})
 
+from django.shortcuts import render, redirect
+from .nlp_utils import summarize_text
+
+
+# -------------------------------------------------
+# STEP 1 — Show CV Form
+# -------------------------------------------------
 def generate_cv(request):
     return render(request, 'cv_form.html')
 
-def cv_preview(request):
+
+# -------------------------------------------------
+# STEP 2 — After form submit → store in session → show template selector
+# -------------------------------------------------
+def choose_template(request):
     if request.method == 'POST':
-        data = {
-            'name': request.POST.get('name'),
-            'email': request.POST.get('email'),
-            'phone': request.POST.get('phone'),
-            'education': request.POST.get('education'),
-            'skills': request.POST.get('skills'),
-            'projects': request.POST.get('projects'),
-            'internships': request.POST.get('internships'),
-            'certifications': request.POST.get('certifications'),
-            'linkedin': request.POST.get('linkedin'),
-            'github': request.POST.get('github'),
-        }
-        return render(request, 'cv_preview.html', data)
+        request.session['cv_post_data'] = request.POST
+        request.session['cv_files_data'] = request.FILES
+        return render(request, 'cv_template_select.html')
 
     return redirect('generate_cv')
+
+
+# -------------------------------------------------
+# STEP 3 — Render selected template
+# -------------------------------------------------
+def render_selected_cv(request, template_name):
+    from django.http import QueryDict
+
+    raw_post_data = request.session.get('cv_post_data')
+
+    if not raw_post_data:
+        return redirect('generate_cv')
+
+    post_data = QueryDict('', mutable=True)
+    post_data.update(raw_post_data)
+
+    files_data = request.session.get('cv_files_data')
+
+    if not post_data:
+        return redirect('generate_cv')
+
+    # 🔥 Get lists
+    project_paragraphs = post_data.getlist('projects')
+    project_titles = post_data.getlist('project_titles')
+
+    project_data = []
+
+    # 🔥 SMART ADAPTIVE PROCESSING (your logic preserved)
+    for title, para in zip(project_titles, project_paragraphs):
+
+        clean_para = (para or "").strip()
+
+        # Case 0: empty
+        if not clean_para:
+            summary = []
+
+        # Case 1: user typed bullet-style lines
+        elif "\n" in clean_para and len(clean_para.split(".")) <= 2:
+            summary = [
+                line.strip()
+                for line in clean_para.split("\n")
+                if line.strip()
+            ]
+
+        # Case 2: normal paragraph → use NLTK
+        else:
+            summary = summarize_text(clean_para, num_sentences=3)
+
+        project_data.append({
+            "title": (title or "").strip() or "Project",
+            "summary": summary
+        })
+
+    profile_image = None
+    if files_data:
+        profile_image = files_data.get('profile_image')
+
+    context = {
+        'name': post_data.get('name') or "N/A",
+        'email': post_data.get('email') or "N/A",
+        'phone': post_data.get('phone') or "N/A",
+        'education': post_data.get('education') or "N/A",
+        'skills': post_data.get('skills') or "N/A",
+        'projects_data': project_data,
+        'internships': post_data.get('internships') or "N/A",
+        'certifications': post_data.get('certifications') or "N/A",
+        'linkedin': post_data.get('linkedin') or "N/A",
+        'github': post_data.get('github') or "N/A",
+        'profile_image': profile_image,
+    }
+
+    template_map = {
+        "generalised": "cv_templates/generalised_template.html",
+        "modern": "cv_templates/modern_template.html",
+        "minimal": "cv_templates/minimal_template.html",
+        "dark": "cv_templates/dark_template.html",
+    }
+
+    return render(request, template_map[template_name], context)
 
 from .models import ContactMessage
 from django.shortcuts import redirect
@@ -204,6 +285,13 @@ def delete_certification(request, cert_id):
     cert = get_object_or_404(Certification, id=cert_id)
     cert.delete()
     return redirect('manage_certifications')
+
+template_map = {
+    "classic": "cv_templates/template_classic.html",
+    "modern": "cv_templates/template_modern.html",
+    "minimal": "cv_templates/template_minimal.html",
+    "generalised": "cv_templates/generalised_template.html",
+}
 
 
 

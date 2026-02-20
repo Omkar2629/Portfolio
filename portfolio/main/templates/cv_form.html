@@ -1,20 +1,268 @@
-<h2>Generate Your CV</h2>
+{% load static %}
 
-<form method="POST" action="{% url 'cv_preview' %}">
-    {% csrf_token %}
+<!DOCTYPE html>
 
-    <input type="text" name="name" placeholder="Full Name"><br>
-    <input type="email" name="email" placeholder="Email"><br>
-    <input type="text" name="phone" placeholder="Phone"><br>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate CV</title>
 
-    <textarea name="education" placeholder="Education"></textarea><br>
-    <textarea name="skills" placeholder="Skills"></textarea><br>
-    <textarea name="projects" placeholder="Projects"></textarea><br>
-    <textarea name="internships" placeholder="Internships"></textarea><br>
-    <textarea name="certifications" placeholder="Certifications"></textarea><br>
+```
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <input type="text" name="linkedin" placeholder="LinkedIn URL"><br>
-    <input type="text" name="github" placeholder="GitHub URL"><br>
+<style>
+    /* ===============================
+       Page Background
+    ============================== */
+    body {
+        background: #020617;
+        color: #e5e7eb;
+    }
 
-    <button type="submit">Generate CV</button>
-</form>
+    /* ===============================
+       Card Styling
+    ============================== */
+    .cv-card {
+        background: #0f172a;
+        border-radius: 18px;
+    }
+
+    /* ===============================
+       Section Heading
+    ============================== */
+    .section-heading {
+        font-weight: 600;
+        margin-top: 26px;
+        margin-bottom: 12px;
+        color: #38bdf8;
+        border-left: 4px solid #38bdf8;
+        padding-left: 12px;
+        letter-spacing: 0.3px;
+    }
+
+    /* ===============================
+       Inputs
+    ============================== */
+    .form-control {
+        background: #020617;
+        border: 1px solid #1f2937;
+        color: #e5e7eb;
+    }
+
+    .form-control::placeholder {
+        color: #64748b;
+    }
+
+    .form-control:focus {
+        background: #020617;
+        color: #e5e7eb;
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 0.15rem rgba(56,189,248,0.25);
+    }
+
+    /* ===============================
+       Buttons
+    ============================== */
+    .btn-info {
+        background: linear-gradient(135deg, #22d3ee, #06b6d4);
+        border: none;
+        font-weight: 600;
+    }
+
+    .btn-info:hover {
+        background: linear-gradient(135deg, #06b6d4, #0891b2);
+    }
+
+    .btn-outline-info {
+        border-color: #38bdf8;
+        color: #38bdf8;
+    }
+
+    .btn-outline-info:hover {
+        background: #38bdf8;
+        color: #020617;
+    }
+    /* ===============================
+   Fix label visibility
+================================ */
+.form-label {
+    color: #e5e7eb !important;
+    font-weight: 500;
+}
+
+/* ===============================
+   Fix helper/muted text
+================================ */
+.text-muted {
+    color: #94a3b8 !important;
+}
+
+/* ===============================
+   Improve main heading visibility
+================================ */
+h2 {
+    color: #f1f5f9;
+}
+
+/* ===============================
+   Improve textarea/input text
+================================ */
+.form-control {
+    color: #e5e7eb !important;
+}
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="container py-5" style="max-width: 900px;">
+    <div class="card cv-card shadow-lg border-0 p-4">
+
+```
+    <h2 class="text-center fw-bold mb-4">Generate Your CV</h2>
+
+    <form method="POST" action="{% url 'choose_template' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- ================= BASIC INFO ================= -->
+        <h5 class="section-heading">Basic Information</h5>
+
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control"
+                   placeholder="Enter your full name">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control"
+                   placeholder="Enter your email">
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control"
+                   placeholder="Enter your phone number">
+        </div>
+        <h5 class="section-heading">Profile Image (Optional)</h5>
+
+<div class="mb-4">
+    <input type="file"
+           name="profile_image"
+           class="form-control"
+           accept="image/*">
+    <small class="text-muted">
+        Upload only if you want your photo on the CV.
+    </small>
+</div>
+
+        <!-- ================= EDUCATION ================= -->
+        <h5 class="section-heading">Education</h5>
+        <div class="mb-4">
+            <textarea name="education" class="form-control" rows="3"
+                      placeholder="Enter your education details"></textarea>
+        </div>
+
+        <!-- ================= SKILLS ================= -->
+        <h5 class="section-heading">Skills</h5>
+        <p class="text-muted small">
+            Example: Python, Django, Machine Learning, SQL
+        </p>
+        <div class="mb-4">
+            <textarea name="skills" class="form-control" rows="3"
+                      placeholder="Enter skills separated by commas"></textarea>
+        </div>
+
+        <!-- ================= PROJECTS ================= -->
+    <h5 class="section-heading">Projects</h5>
+<p class="text-muted small">
+    Describe your project in paragraph form OR enter bullet points. NLTK will auto-generate highlights.
+</p>
+
+<div id="projects-wrapper">
+    <div class="project-block mb-3">
+
+        <!-- 🔥 Project Title -->
+        <input type="text"
+               name="project_titles"
+               class="form-control mb-2"
+               placeholder="Project Name (e.g., Crop Disease Detection System)">
+
+        <!-- 🔥 Project Description -->
+        <textarea name="projects"
+                  class="form-control"
+                  rows="4"
+                  placeholder="Explain your project in detail..."></textarea>
+
+    </div>
+</div>
+
+<button type="button"
+        class="btn btn-outline-info mb-4"
+        onclick="addProject()">
+    + Add Another Project
+</button>
+        <!-- ================= INTERNSHIPS ================= -->
+        <h5 class="section-heading">Internships</h5>
+        <div class="mb-4">
+            <textarea name="internships" class="form-control" rows="3"
+                      placeholder="Enter internship details"></textarea>
+        </div>
+
+        <!-- ================= CERTIFICATIONS ================= -->
+        <h5 class="section-heading">Certifications</h5>
+        <div class="mb-4">
+            <textarea name="certifications" class="form-control" rows="3"
+                      placeholder="Enter certifications"></textarea>
+        </div>
+
+        <!-- ================= LINKS ================= -->
+        <h5 class="section-heading">Links</h5>
+
+        <div class="mb-3">
+            <input type="url" name="linkedin" class="form-control"
+                   placeholder="LinkedIn URL">
+        </div>
+
+        <div class="mb-4">
+            <input type="url" name="github" class="form-control"
+                   placeholder="GitHub URL">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-info px-5 py-2">
+                Generate CV
+            </button>
+        </div>
+
+    </form>
+</div>
+```
+
+</div>
+
+<!-- ================= ADD PROJECT JS ================= -->
+
+<script>
+function addProject() {
+    const wrapper = document.getElementById("projects-wrapper");
+
+    const block = document.createElement("div");
+    block.className = "project-block mb-3";
+
+    block.innerHTML =
+        '<input type="text" name="project_titles" class="form-control mb-2" ' +
+        'placeholder="Project Name (e.g., Crop Disease Detection System)">' +
+
+        '<textarea name="projects" class="form-control" rows="4" ' +
+        'placeholder="Explain your project in detail..."></textarea>';
+
+    wrapper.appendChild(block);
+}
+</script>
+
+</body>
+</html>
