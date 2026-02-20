@@ -1,31 +1,224 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Modern CV</title>
+
 <style>
-body { font-family: 'Segoe UI'; background:#f8fafc; padding:40px; }
-.container { background:white; padding:30px; border-radius:10px; }
-h1 { color:#2563eb; }
+/* ✅ PERFECT A4 */
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+/* RESET */
+body {
+    margin: 0;
+    padding: 0;
+    background: white;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1f2937;
+}
+
+/* MAIN PAGE */
+.cv-page {
+    width: 100%;
+    max-width: 190mm;
+    margin: auto;
+    background: white;
+    display: flex;
+    box-sizing: border-box;
+}
+
+/* LEFT COLUMN */
+.left {
+    width: 65%;
+    padding: 24px 26px;
+    box-sizing: border-box;
+}
+
+/* RIGHT COLUMN */
+.right {
+    width: 35%;
+    background: #27445d;
+    color: white;
+    padding: 24px 18px;
+    box-sizing: border-box;
+}
+
+/* NAME */
+.name {
+    font-size: 32px;
+    font-weight: 700;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+/* ROLE */
+.role {
+    color: #3b82f6;
+    font-size: 15px;
+    margin-bottom: 16px;
+}
+
+/* CONTACT */
+.contact {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 22px;
+}
+
+/* SECTION */
+.section-title {
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 14px;
+    margin-top: 22px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 5px;
+}
+
+/* RIGHT TITLES */
+.right .section-title {
+    color: white;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+}
+
+/* TEXT */
+.text {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* PROJECT TITLE */
+.project-title {
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+/* LIST */
+ul {
+    margin: 5px 0 12px 16px;
+    padding: 0;
+}
+
+li {
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+/* PREVENT BAD BREAKS */
+.section-title,
+.project-title,
+ul,
+.text {
+    page-break-inside: avoid;
+}
+
+/* DOWNLOAD BUTTON */
+.no-print {
+    text-align: right;
+    max-width: 190mm;
+    margin: 16px auto;
+}
+
+.download-btn {
+    background: #3b82f6;
+    color: white;
+    padding: 7px 14px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* hide in pdf */
+@media print {
+    .no-print {
+        display: none;
+    }
+}
 </style>
 </head>
+
 <body>
-<div class="container">
 
-<h1>{{ name }}</h1>
-<p>{{ email }} • {{ phone }}</p>
+<!-- ✅ DOWNLOAD BUTTON (VISIBLE ONLY ON WEB) -->
+<div class="no-print">
+    <a href="{% url 'download_cv_pdf' template_name='modern' %}" class="download-btn">
+        ⬇ Download PDF
+    </a>
+</div>
 
-<h3>Skills</h3>
-<p>{{ skills }}</p>
+<div class="cv-page">
 
-<h3>Projects</h3>
-{% for proj in projects_data %}
-<ul>
-{% for p in proj.summary %}
-<li>{{ p }}</li>
-{% endfor %}
-</ul>
-{% endfor %}
+    <!-- LEFT COLUMN -->
+    <div class="left">
+
+        <div class="name">{{ name }}</div>
+
+        <div class="role">
+            Python Developer &bull; AI &amp; Data Science Enthusiast
+        </div>
+
+        <div class="contact">
+            {{ email }} &nbsp; | &nbsp; {{ phone }}
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="section-title">SUMMARY</div>
+        <div class="text">
+            Passionate Python developer with experience in Django, Machine Learning, and data-driven applications.
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="section-title">PROJECTS</div>
+
+        {% for proj in projects_data %}
+            <div class="project-title">{{ proj.title }}</div>
+
+            {% if proj.summary %}
+                <ul>
+                    {% for point in proj.summary %}
+                        <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <ul><li>N/A</li></ul>
+            {% endif %}
+        {% endfor %}
+
+        <!-- EDUCATION -->
+        <div class="section-title">EDUCATION</div>
+        <div class="text">
+            {{ education }}
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="right">
+
+        <div class="section-title">SKILLS</div>
+        <div class="text">{{ skills }}</div>
+
+        <div class="section-title">INTERNSHIPS</div>
+        <div class="text">{{ internships }}</div>
+
+        <div class="section-title">CERTIFICATIONS</div>
+        <div class="text">{{ certifications }}</div>
+
+        <div class="section-title">LINKS</div>
+        <div class="text">
+            LinkedIn: {{ linkedin }}<br>
+            GitHub: {{ github }}
+        </div>
+
+    </div>
 
 </div>
+
 </body>
 </html>

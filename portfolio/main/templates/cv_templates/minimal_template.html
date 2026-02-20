@@ -1,27 +1,221 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Minimal CV</title>
+<meta charset="UTF-8">
+<title>Modern CV</title>
+
 <style>
-body { font-family: Georgia; margin:50px; }
-h1 { font-weight: normal; }
+@page {
+    size: A4;
+    margin: 12mm;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1f2937;
+}
+
+/* ===== WRAPPER ===== */
+.cv-container {
+    max-width: 190mm;
+    margin: auto;
+}
+
+/* ===== HEADER ===== */
+.header {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+}
+
+.name {
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.role {
+    font-size: 15px;
+    color: #2563eb;
+    margin-bottom: 8px;
+}
+
+.contact {
+    font-size: 13px;
+    color: #4b5563;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+    margin-top: 18px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+}
+
+/* ===== TEXT ===== */
+.text {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #374151;
+}
+
+/* ===== PROJECT ===== */
+.project {
+    margin-bottom: 10px;
+}
+
+.project-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+ul {
+    margin: 6px 0 12px 18px;
+    padding: 0;
+}
+
+li {
+    font-size: 13.5px;
+    margin-bottom: 3px;
+}
+
+/* ===== GRID ===== */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.no-print {
+    text-align: right;
+    max-width: 190mm;
+    margin: 18px auto;
+}
+
+.download-btn {
+    background: #2563eb;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}
 </style>
 </head>
+
 <body>
 
-<h1>{{ name }}</h1>
-<p>{{ email }} | {{ phone }}</p>
+<!-- ✅ DOWNLOAD BUTTON -->
+<div class="no-print">
+    <a href="{% url 'download_cv_pdf' template_name='modern' %}" class="download-btn">
+        ⬇ Download PDF
+    </a>
+</div>
 
-<hr>
+<div class="cv-container">
 
-<h3>Projects</h3>
-{% for proj in projects_data %}
-<ul>
-{% for p in proj.summary %}
-<li>{{ p }}</li>
-{% endfor %}
-</ul>
-{% endfor %}
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <div class="name">{{ name }}</div>
+
+        <div class="role">
+            Python Developer • AI &amp; Data Science Enthusiast
+        </div>
+
+        <div class="contact">
+            {{ email }} &nbsp; | &nbsp; {{ phone }}
+            {% if linkedin != "N/A" %}&nbsp; | &nbsp; {{ linkedin }}{% endif %}
+            {% if github != "N/A" %}&nbsp; | &nbsp; {{ github }}{% endif %}
+        </div>
+    </div>
+
+    <!-- ===== MAIN GRID ===== -->
+    <div class="two-col">
+
+        <!-- LEFT -->
+        <div>
+
+            <!-- SUMMARY -->
+            <div class="section">
+                <div class="section-title">SUMMARY</div>
+                <div class="text">
+                    Passionate Python developer with experience in Django,
+                    Machine Learning, and data-driven applications.
+                </div>
+            </div>
+
+            <!-- PROJECTS -->
+            <div class="section">
+                <div class="section-title">PROJECTS</div>
+
+                {% for proj in projects_data %}
+                    <div class="project">
+                        <div class="project-title">{{ proj.title }}</div>
+
+                        {% if proj.summary %}
+                            <ul>
+                                {% for point in proj.summary %}
+                                    <li>{{ point }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <ul><li>N/A</li></ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+
+            <div class="section">
+                <div class="section-title">SKILLS</div>
+                <div class="text">{{ skills }}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">INTERNSHIPS</div>
+                <div class="text">{{ internships }}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">EDUCATION</div>
+                <div class="text">{{ education }}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">CERTIFICATIONS</div>
+                <div class="text">{{ certifications }}</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>

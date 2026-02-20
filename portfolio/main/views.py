@@ -1,6 +1,10 @@
 from .models import Skill, Project, Internship, Education
 from django.shortcuts import render
 from .nlp_utils import summarize_text
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+import io
 
 def home(request):
     skills = Skill.objects.all()
@@ -292,6 +296,75 @@ template_map = {
     "minimal": "cv_templates/template_minimal.html",
     "generalised": "cv_templates/generalised_template.html",
 }
+
+def download_cv_pdf(request, template_name):
+    from django.http import QueryDict
+
+    raw_post_data = request.session.get('cv_post_data')
+
+    if not raw_post_data:
+        return redirect('generate_cv')
+
+    post_data = QueryDict('', mutable=True)
+    post_data.update(raw_post_data)
+
+    files_data = request.session.get('cv_files_data')
+
+    # ---------- project processing (same logic) ----------
+    project_paragraphs = post_data.getlist('projects')
+    project_titles = post_data.getlist('project_titles')
+
+    project_data = []
+
+    for title, para in zip(project_titles, project_paragraphs):
+        clean_para = (para or "").strip()
+
+        if not clean_para:
+            summary = []
+        elif "\n" in clean_para and len(clean_para.split(".")) <= 2:
+            summary = [line.strip() for line in clean_para.split("\n") if line.strip()]
+        else:
+            summary = summarize_text(clean_para, num_sentences=3)
+
+        project_data.append({
+            "title": (title or "").strip() or "Project",
+            "summary": summary
+        })
+
+    profile_image = None
+    if files_data:
+        profile_image = files_data.get('profile_image')
+
+    context = {
+        'name': post_data.get('name') or "N/A",
+        'email': post_data.get('email') or "N/A",
+        'phone': post_data.get('phone') or "N/A",
+        'education': post_data.get('education') or "N/A",
+        'skills': post_data.get('skills') or "N/A",
+        'projects_data': project_data,
+        'internships': post_data.get('internships') or "N/A",
+        'certifications': post_data.get('certifications') or "N/A",
+        'linkedin': post_data.get('linkedin') or "N/A",
+        'github': post_data.get('github') or "N/A",
+        'profile_image': profile_image,
+    }
+
+    template_map = {
+        "generalised": "cv_templates/generalised_template.html",
+        "modern": "cv_templates/modern_template.html",
+        "minimal": "cv_templates/minimal_template.html",
+        "dark": "cv_templates/dark_template.html",
+    }
+
+    template = get_template(template_map[template_name])
+    html = template.render(context)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Omkar_CV.pdf"'
+
+    pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=response)
+
+    return response
 
 
 

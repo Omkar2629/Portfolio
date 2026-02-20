@@ -28,5 +28,6 @@ urlpatterns = [
     path('generate-cv/', views.generate_cv, name='generate_cv'),
     path('choose-template/', views.choose_template, name='choose_template'),
     path('cv/<str:template_name>/', views.render_selected_cv, name='render_selected_cv'),
+    path('cv-download/<str:template_name>/', views.download_cv_pdf, name='download_cv_pdf'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
