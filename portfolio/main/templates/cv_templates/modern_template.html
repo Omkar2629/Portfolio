@@ -5,13 +5,12 @@
 <title>Modern CV</title>
 
 <style>
-/* ✅ PERFECT A4 */
+/* ================= A4 ================= */
 @page {
     size: A4;
     margin: 10mm;
 }
 
-/* RESET */
 body {
     margin: 0;
     padding: 0;
@@ -20,33 +19,38 @@ body {
     color: #1f2937;
 }
 
-/* MAIN PAGE */
-.cv-page {
-    width: 100%;
-    max-width: 190mm;
+/* ================= WRAPPER ================= */
+.cv-wrapper {
+    width: 190mm;
     margin: auto;
-    background: white;
-    display: flex;
-    box-sizing: border-box;
+}
+
+/* ================= TABLE LAYOUT (XHTML2PDF SAFE) ================= */
+.cv-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
 /* LEFT COLUMN */
-.left {
+.left-col {
     width: 65%;
+    vertical-align: top;
     padding: 24px 26px;
     box-sizing: border-box;
 }
 
-/* RIGHT COLUMN */
-.right {
+/* RIGHT SIDEBAR */
+.right-col {
     width: 35%;
+    vertical-align: top;
+    padding: 24px 18px;
     background: #27445d;
     color: white;
-    padding: 24px 18px;
     box-sizing: border-box;
 }
 
-/* NAME */
+/* ================= TYPOGRAPHY ================= */
 .name {
     font-size: 32px;
     font-weight: 700;
@@ -54,21 +58,18 @@ body {
     margin-bottom: 6px;
 }
 
-/* ROLE */
 .role {
     color: #3b82f6;
     font-size: 15px;
     margin-bottom: 16px;
 }
 
-/* CONTACT */
 .contact {
     font-size: 13px;
     color: #6b7280;
     margin-bottom: 22px;
 }
 
-/* SECTION */
 .section-title {
     font-weight: 700;
     letter-spacing: 1px;
@@ -79,26 +80,22 @@ body {
     padding-bottom: 5px;
 }
 
-/* RIGHT TITLES */
-.right .section-title {
+.right-col .section-title {
     color: white;
     border-bottom: 1px solid rgba(255,255,255,0.35);
 }
 
-/* TEXT */
 .text {
     font-size: 13px;
     line-height: 1.5;
 }
 
-/* PROJECT TITLE */
 .project-title {
     font-weight: 600;
     margin-top: 10px;
     margin-bottom: 5px;
 }
 
-/* LIST */
 ul {
     margin: 5px 0 12px 16px;
     padding: 0;
@@ -109,18 +106,10 @@ li {
     margin-bottom: 3px;
 }
 
-/* PREVENT BAD BREAKS */
-.section-title,
-.project-title,
-ul,
-.text {
-    page-break-inside: avoid;
-}
-
-/* DOWNLOAD BUTTON */
+/* ================= DOWNLOAD BUTTON ================= */
 .no-print {
     text-align: right;
-    max-width: 190mm;
+    width: 190mm;
     margin: 16px auto;
 }
 
@@ -134,7 +123,6 @@ ul,
     font-weight: 600;
 }
 
-/* hide in pdf */
 @media print {
     .no-print {
         display: none;
@@ -145,35 +133,39 @@ ul,
 
 <body>
 
-<!-- ✅ DOWNLOAD BUTTON (VISIBLE ONLY ON WEB) -->
+<!-- DOWNLOAD BUTTON -->
 <div class="no-print">
     <a href="{% url 'download_cv_pdf' template_name='modern' %}" class="download-btn">
         ⬇ Download PDF
     </a>
 </div>
 
-<div class="cv-page">
+<div class="cv-wrapper">
+<table class="cv-table">
+<tr>
 
     <!-- LEFT COLUMN -->
-    <div class="left">
+    <td class="left-col">
 
         <div class="name">{{ name }}</div>
 
+        {% if role %}
         <div class="role">
-            Python Developer &bull; AI &amp; Data Science Enthusiast
+            {{ role }}
         </div>
+        {% endif %}
 
         <div class="contact">
             {{ email }} &nbsp; | &nbsp; {{ phone }}
         </div>
 
-        <!-- SUMMARY -->
+        {% if summary %}
         <div class="section-title">SUMMARY</div>
         <div class="text">
-            Passionate Python developer with experience in Django, Machine Learning, and data-driven applications.
+            {{ summary }}
         </div>
+        {% endif %}
 
-        <!-- PROJECTS -->
         <div class="section-title">PROJECTS</div>
 
         {% for proj in projects_data %}
@@ -190,16 +182,15 @@ ul,
             {% endif %}
         {% endfor %}
 
-        <!-- EDUCATION -->
         <div class="section-title">EDUCATION</div>
         <div class="text">
             {{ education }}
         </div>
 
-    </div>
+    </td>
 
-    <!-- RIGHT SIDEBAR -->
-    <div class="right">
+    <!-- RIGHT COLUMN -->
+    <td class="right-col">
 
         <div class="section-title">SKILLS</div>
         <div class="text">{{ skills }}</div>
@@ -216,8 +207,10 @@ ul,
             GitHub: {{ github }}
         </div>
 
-    </div>
+    </td>
 
+</tr>
+</table>
 </div>
 
 </body>

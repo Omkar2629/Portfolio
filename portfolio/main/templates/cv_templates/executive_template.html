@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Executive CV</title>
+
+<style>
+@page {
+    size: A4;
+    margin: 12mm;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #374151;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.no-print {
+    max-width: 190mm;
+    margin: 16px auto;
+    text-align: right;
+}
+
+.download-btn {
+    background: #2563eb;
+    color: white;
+    padding: 7px 14px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media print {
+    .no-print { display: none; }
+}
+
+/* ===== MAIN CONTAINER ===== */
+.cv-container {
+    max-width: 190mm;
+    margin: auto;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+/* ===== BULLETPROOF HEADER (TABLE — NO GAP EVER) ===== */
+.header-table {
+    border-collapse: collapse;
+    margin-bottom: 14px;
+}
+
+.header-cell {
+    background: #3f678f;
+    color: white;
+    text-align: center;
+    padding: 26px 20px 20px;
+}
+
+/* ===== TEXT ===== */
+.name {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.contact {
+    font-size: 12.5px;
+    color: #e5e7eb;
+}
+
+/* ===== BODY ===== */
+.body {
+    padding: 20px 26px;
+}
+
+/* ===== SECTION ===== */
+.section {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+    border: none;
+    background: transparent;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #3f678f;
+    margin-bottom: 6px;
+}
+
+.text {
+    font-size: 13px;
+    line-height: 1.45;
+    border: none;
+    background: transparent;
+}
+
+/* ===== PROJECT ===== */
+.project {
+    margin-bottom: 8px;
+    border: none;
+    background: transparent;
+}
+
+.project-title {
+    font-weight: 700;
+    font-size: 13.5px;
+    margin-bottom: 3px;
+}
+
+ul {
+    margin: 4px 0 8px 16px;
+    padding: 0;
+}
+
+li {
+    font-size: 12.8px;
+    margin-bottom: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- DOWNLOAD BUTTON -->
+<div class="no-print">
+    <a href="{% url 'download_cv_pdf' template_name='executive' %}" class="download-btn">
+        ⬇ Download PDF
+    </a>
+</div>
+
+<div class="cv-container">
+
+    <!-- ✅ BULLETPROOF HEADER -->
+    <table class="header-table" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="header-cell">
+                <div class="name">{{ name }}</div>
+                <div class="contact">
+                    {{ email }} &nbsp; | &nbsp; {{ phone }}
+                    {% if linkedin != "N/A" %}&nbsp; | &nbsp; {{ linkedin }}{% endif %}
+                    {% if github != "N/A" %}&nbsp; | &nbsp; {{ github }}{% endif %}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="body">
+
+        <!-- SUMMARY -->
+        {% if summary %}
+        <div class="section">
+            <div class="section-title">Summary</div>
+            <div class="text">{{ summary }}</div>
+        </div>
+        {% endif %}
+
+        <!-- SKILLS -->
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <div class="text">{{ skills }}</div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="section">
+            <div class="section-title">Projects</div>
+
+            {% for proj in projects_data %}
+            <div class="project">
+                <div class="project-title">{{ proj.title }}</div>
+
+                {% if proj.summary %}
+                <ul>
+                    {% for point in proj.summary %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div class="section">
+            <div class="section-title">Experience</div>
+            <div class="text">{{ internships }}</div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="section">
+            <div class="section-title">Education</div>
+            <div class="text">{{ education }}</div>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="section">
+            <div class="section-title">Certifications</div>
+            <div class="text">{{ certifications }}</div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

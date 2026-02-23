@@ -135,7 +135,7 @@ def render_selected_cv(request, template_name):
         "generalised": "cv_templates/generalised_template.html",
         "modern": "cv_templates/modern_template.html",
         "minimal": "cv_templates/minimal_template.html",
-        "dark": "cv_templates/dark_template.html",
+        "dark": "cv_templates/executive_template.html",
     }
 
     return render(request, template_map[template_name], context)
@@ -339,6 +339,8 @@ def download_cv_pdf(request, template_name):
         'name': post_data.get('name') or "N/A",
         'email': post_data.get('email') or "N/A",
         'phone': post_data.get('phone') or "N/A",
+        'role': post_data.get('role') or "",
+        'summary': post_data.get('summary') or "",
         'education': post_data.get('education') or "N/A",
         'skills': post_data.get('skills') or "N/A",
         'projects_data': project_data,
@@ -353,7 +355,7 @@ def download_cv_pdf(request, template_name):
         "generalised": "cv_templates/generalised_template.html",
         "modern": "cv_templates/modern_template.html",
         "minimal": "cv_templates/minimal_template.html",
-        "dark": "cv_templates/dark_template.html",
+        "executive": "cv_templates/executive_template.html",
     }
 
     template = get_template(template_map[template_name])
