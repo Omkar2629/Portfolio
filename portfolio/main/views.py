@@ -39,20 +39,13 @@ def project_detail(request, slug):
     project = Project.objects.get(slug=slug)
     return render(request, 'project_detail.html', {'project': project})
 
-from django.shortcuts import render, redirect
 from .nlp_utils import summarize_text
 
-
-# -------------------------------------------------
 # STEP 1 — Show CV Form
-# -------------------------------------------------
 def generate_cv(request):
     return render(request, 'cv_form.html')
 
-
-# -------------------------------------------------
 # STEP 2 — After form submit → store in session → show template selector
-# -------------------------------------------------
 def choose_template(request):
     if request.method == 'POST':
         request.session['cv_post_data'] = request.POST
@@ -62,9 +55,7 @@ def choose_template(request):
     return redirect('generate_cv')
 
 
-# -------------------------------------------------
 # STEP 3 — Render selected template
-# -------------------------------------------------
 def render_selected_cv(request, template_name):
     from django.http import QueryDict
 
@@ -362,7 +353,8 @@ def download_cv_pdf(request, template_name):
     html = template.render(context)
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="Omkar_CV.pdf"'
+    filename = f"{template_name}_cv.pdf"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=response)
 

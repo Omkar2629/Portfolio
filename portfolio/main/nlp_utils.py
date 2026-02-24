@@ -5,10 +5,6 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 
 def summarize_text(text, num_sentences=3):
-    """
-    Extractive text summarizer using word frequency.
-    Returns top N important sentences.
-    """
 
     if not text:
         return []
