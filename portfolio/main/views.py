@@ -269,9 +269,20 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def manage_certifications(request):
-    certifications = Certification.objects.all().order_by('-year')
+    certifications = Certification.objects.order_by('-year')
+
+    if request.method == 'POST':
+        form = CertificationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Certification added successfully.")
+            return redirect('manage_certifications')
+    else:
+        form = CertificationForm()
+
     return render(request, 'manage_certifications.html', {
-        'certifications': certifications
+        'certifications': certifications,
+        'form': form,
     })
 
 
@@ -280,6 +291,10 @@ def delete_certification(request, cert_id):
     cert = get_object_or_404(Certification, id=cert_id)
     cert.delete()
     return redirect('manage_certifications')
+
+from .forms import CertificationForm
+from django.contrib import messages
+
 
 template_map = {
     "classic": "cv_templates/template_classic.html",
