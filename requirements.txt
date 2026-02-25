@@ -4,3 +4,6 @@ djangorestframework
 python-dotenv
 gunicorn
 Pillow
+whitenoise
+nltk
+xhtml2pdf
