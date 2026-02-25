@@ -284,12 +284,18 @@
 
         <div class="skills-box">
             <h4>Soft Skills</h4>
-            <p>Problem Solving • Team Player • Adaptive • Quick Learner</p>
+                <p>Problem Solving • Team Player • Adaptive • Quick Learner</p>
         </div>
-        {% for skill in skills %}
+        {% regroup skills by category as skill_groups %}
+
+{% for group in skill_groups %}
 <div class="skills-box">
-    <h4>{{ skill.name }}</h4>
-    <p>{{ skill.category }}</p>
+    <h4>{{ group.grouper }}</h4>
+    <p>
+        {% for skill in group.list %}
+            {{ skill.name|cut:"," }}{% if not forloop.last %} • {% endif %}
+        {% endfor %}
+    </p>
 </div>
 {% endfor %}
 

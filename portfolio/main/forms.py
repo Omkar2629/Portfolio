@@ -2,11 +2,28 @@ from django import forms
 from .models import Skill, Project, Internship, Education, Certification
 
 
+from django import forms
+from .models import Skill
+
+
 class SkillForm(forms.ModelForm):
     class Meta:
         model = Skill
-        fields = '__all__'
-
+        fields = ['category', 'name', 'proficiency']
+        widgets = {
+            'category': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Soft Skills / Tools'
+            }),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter skill'
+            }),
+            'proficiency': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Optional'
+            }),
+        }
 
 class ProjectForm(forms.ModelForm):
     class Meta:

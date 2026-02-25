@@ -27,6 +27,11 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 18px rgba(0,0,0,0.08);
         }
+
+        .category-badge {
+            font-size: 12px;
+            background: #0d6efd;
+        }
     </style>
 </head>
 <body>
@@ -51,14 +56,19 @@
 
             <div class="row g-3">
 
-                <div class="col-md-6">
-                    <label class="form-label">Skill Name</label>
-                    <input type="text" name="name" class="form-control" required>
+                <div class="col-md-4">
+                    <label class="form-label">Skill Category</label>
+                    <input type="text" name="category" class="form-control" placeholder="Soft Skills / Tools" required>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Proficiency Level (Optional)</label>
-                    <input type="text" name="level" class="form-control">
+                <div class="col-md-4">
+                    <label class="form-label">Skill Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter skill" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Proficiency (Optional)</label>
+                    <input type="text" name="proficiency" class="form-control" placeholder="Beginner / Intermediate / Expert">
                 </div>
 
             </div>
@@ -78,21 +88,31 @@
             <div class="skill-card mb-3 d-flex justify-content-between align-items-center">
 
                 <div>
+                    <span class="badge category-badge mb-2">
+                        {{ skill.category }}
+                    </span>
+
                     <h6 class="mb-1 fw-semibold">
                         {{ skill.name }}
                     </h6>
-                    {% if skill.level %}
+
+                    {% if skill.proficiency %}
                     <small class="text-muted">
-                        {{ skill.level }}
+                        {{ skill.proficiency }}
                     </small>
                     {% endif %}
                 </div>
 
-                <a href="{% url 'delete_skill' skill.id %}"
-                   onclick="return confirm('Delete this skill?');"
-                   class="btn btn-outline-danger btn-sm">
-                    Delete
-                </a>
+                <!-- ✅ POST delete (correct) -->
+                <form method="POST"
+                      action="{% url 'delete_skill' skill.id %}"
+                      onsubmit="return confirm('Delete this skill?');">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="btn btn-outline-danger btn-sm">
+                        Delete
+                    </button>
+                </form>
 
             </div>
             {% endfor %}

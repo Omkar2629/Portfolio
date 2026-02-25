@@ -1,13 +1,29 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 # Create your models here.
+from django.db import models
+from django.contrib.auth.models import User
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+
 class Skill(models.Model):
-    name = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="skills"
+    )
+
+    category = models.CharField(max_length=100)  # ⭐ Soft Skills / Tools
+    name = models.CharField(max_length=100)      # ⭐ actual skill
+    proficiency = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.category} - {self.name}"
 
 class Project(models.Model):
     title = models.CharField(max_length=200)

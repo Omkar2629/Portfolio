@@ -31,7 +31,6 @@ urlpatterns = [
     path('dashboard/projects/delete/<int:project_id>/', views.delete_project, name='delete_project'),
     path('dashboard/certifications/', views.manage_certifications, name='manage_certifications'),
     path('dashboard/certifications/delete/<int:cert_id>/', views.delete_certification, name='delete_certification'),
-    path('generate-cv/', views.generate_cv, name='generate_cv'),
     path('choose-template/', views.choose_template, name='choose_template'),
     path('cv/<str:template_name>/', views.render_selected_cv, name='render_selected_cv'),
     path('cv-download/<str:template_name>/', views.download_cv_pdf, name='download_cv_pdf'),

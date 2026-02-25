@@ -1,6 +1,3 @@
-from .models import Skill, Project, Internship, Education
-from django.shortcuts import render
-from .nlp_utils import summarize_text
 from django.template.loader import get_template
 from django.http import HttpResponse
 from xhtml2pdf import pisa
@@ -191,26 +188,29 @@ def dashboard(request):
 
     return render(request, "dashboard.html", context)
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 @login_required
 def manage_skills(request):
-    if not request.user.is_superuser:
-        return HttpResponseForbidden("Access Denied")
-
-    skills = Skill.objects.all()
+    skills = Skill.objects.filter(user=request.user)
 
     if request.method == "POST":
         form = SkillForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('manage_skills')
+            skill = form.save(commit=False)
+            skill.user = request.user
+            skill.save()
+            return redirect("manage_skills")
     else:
         form = SkillForm()
 
-    return render(request, "manage_skills.html", {
+    context = {
+        "form": form,
         "skills": skills,
-        "form": form
-    })
+    }
+    return render(request, "manage_skills.html", context)
 
 @login_required
 def manage_projects(request):
@@ -238,29 +238,25 @@ from .forms import SkillForm, ProjectForm, InternshipForm, EducationForm
 
 @login_required
 def delete_skill(request, skill_id):
-    if not request.user.is_superuser:
-        return HttpResponseForbidden("Access Denied")
-
-    skill = Skill.objects.get(id=skill_id)
+    skill = get_object_or_404(
+        Skill,
+        id=skill_id,
+        user=request.user  # 🔥 ownership check
+    )
 
     if request.method == "POST":
         skill.delete()
-        return redirect('manage_skills')
 
-    return redirect('manage_skills')
+    return redirect("manage_skills")
 
 @login_required
 def delete_project(request, project_id):
-    if not request.user.is_superuser:
-        return HttpResponseForbidden("Access Denied")
-
-    project = Project.objects.get(id=project_id)
+    project = get_object_or_404(Project, id=project_id)
 
     if request.method == "POST":
         project.delete()
-        return redirect('manage_projects')
 
-    return redirect('manage_projects')
+    return redirect("manage_projects")
 
 from .models import Certification
 from django.shortcuts import get_object_or_404, redirect
