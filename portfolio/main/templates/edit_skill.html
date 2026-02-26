@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Skill</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .main-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Edit Skill</span>
+    <div>
+        <a href="{% url 'manage_skills' %}" class="btn btn-outline-light btn-sm">
+            Back
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <div class="main-card">
+
+        <h4 class="mb-4">Update Skill</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Skill Category</label>
+                    <input type="text"
+                           name="category"
+                           class="form-control"
+                           value="{{ skill.category }}"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Skill Name</label>
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           value="{{ skill.name }}"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Proficiency (Optional)</label>
+                    <input type="text"
+                           name="proficiency"
+                           class="form-control"
+                           value="{{ skill.proficiency }}">
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">
+                Update Skill
+            </button>
+
+            <a href="{% url 'manage_skills' %}" class="btn btn-secondary mt-4 ms-2">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

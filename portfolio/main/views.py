@@ -371,5 +371,17 @@ def download_cv_pdf(request, template_name):
 
     return response
 
+def edit_skill(request, skill_id):
+    skill = get_object_or_404(Skill, id=skill_id)
+
+    if request.method == 'POST':
+        skill.category = request.POST.get('category')
+        skill.name = request.POST.get('name')
+        skill.proficiency = request.POST.get('proficiency')
+        skill.save()
+        return redirect('manage_skills')
+
+    return render(request, 'edit_skill.html', {'skill': skill})
+
 
 

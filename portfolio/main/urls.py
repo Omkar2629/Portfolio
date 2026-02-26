@@ -37,5 +37,6 @@ urlpatterns = [
     path('api/projects/', project_list_api),
     path('api/projects/create/', project_create_api),
     path('api/projects/<slug:slug>/', project_detail_api),
+    path('edit-skill/<int:skill_id>/', views.edit_skill, name='edit_skill'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
