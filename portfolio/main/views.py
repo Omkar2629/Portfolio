@@ -1,7 +1,12 @@
 from django.template.loader import get_template
 from django.http import HttpResponse
-from xhtml2pdf import pisa
 import io
+
+try:
+    from xhtml2pdf import pisa
+except ImportError:
+    pisa = None
+
 
 def home(request):
     skills = Skill.objects.all()
@@ -300,6 +305,8 @@ template_map = {
 }
 
 def download_cv_pdf(request, template_name):
+    if pisa is None:
+        return HttpResponse("PDF feature not available in production yet.", status=501)
     from django.http import QueryDict
 
     raw_post_data = request.session.get('cv_post_data')
