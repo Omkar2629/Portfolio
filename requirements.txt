@@ -6,4 +6,3 @@ gunicorn
 Pillow
 whitenoise
 nltk
-xhtml2pdf
