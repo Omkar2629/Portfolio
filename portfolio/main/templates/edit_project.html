@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .main-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Edit Project</span>
+    <div>
+        <a href="{% url 'manage_projects' %}" class="btn btn-outline-light btn-sm">
+            Back
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="main-card">
+
+        <h4 class="mb-4">Update Project</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Project Title</label>
+                    <input type="text" name="title" class="form-control" value="{{ form.title.value }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Tech Stack</label>
+                    <input type="text" name="tech_stack" class="form-control" value="{{ form.tech_stack.value }}">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="4" class="form-control">{{ form.description.value }}</textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">GitHub Link</label>
+                    <input type="url" name="github_link" class="form-control" value="{{ form.github_link.value }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Live Link</label>
+                    <input type="url" name="live_link" class="form-control" value="{{ form.live_link.value }}">
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-success mt-4">
+                Update Project
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

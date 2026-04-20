@@ -390,5 +390,18 @@ def edit_skill(request, skill_id):
 
     return render(request, 'edit_skill.html', {'skill': skill})
 
+def edit_project(request, id):
+    project = get_object_or_404(Project, id=id)
 
+    if request.method == 'POST':
+        project.title = request.POST.get('title')
+        project.tech_stack = request.POST.get('tech_stack')
+        project.description = request.POST.get('description')
+        project.github_link = request.POST.get('github_link')
+        project.live_link = request.POST.get('live_link')
+
+        project.save()
+        return redirect('manage_projects')
+
+    return render(request, 'edit_project.html', {'form': project})
 
