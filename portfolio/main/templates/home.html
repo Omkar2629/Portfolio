@@ -366,6 +366,7 @@
 </section>
 
 <!-- CERTIFICATIONS SECTION -->
+{% load static %}
 <section id="certifications" class="py-4">
   <div class="container">
 
@@ -383,9 +384,9 @@
 
         <!-- LEFT: Certificate Image -->
         <div class="col-md-3 text-center mb-3 mb-md-0">
-          <img src="{{ cert.image.url }}"
-               alt="{{ cert.title }}"
-               class="img-fluid rounded certification-img">
+          <img src="{% static cert.image %}"
+                 alt="{{ cert.title }}"
+                 class="img-fluid rounded certification-img">
         </div>
 
         <!-- RIGHT: Certificate Content -->
